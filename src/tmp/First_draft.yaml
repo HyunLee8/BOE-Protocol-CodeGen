@@ -1,0 +1,76 @@
+#table 12 Login Request
+LoginRequest:
+  fields:
+    StartOfMessage: uint16_t
+    MessageLength: uint16_t
+    MessageType: uint8_t
+    MatchingUnit: uint8_t
+    SequenceNumber: uint32_t
+    SessionSubID: char[4]
+    Username: char[4]
+    Password: char[10]
+    NumberOfParamGroups:
+
+      #table 12
+      ParamGroups:
+        UnitSequenceParameterGroup::
+          ParamGroupLength: uint16_t
+          ParamGroupType: uint8_t
+          NoUnspecified_UnitReplay: uint8_t
+          NumberOfUnits:
+            UnitNumber: uint8_t
+            UnitSequence: uint32_t
+
+      #table 13
+      ReturnBitfieldsParameterGroup:       
+        ParamGroupLength: uint16_t
+        ParamGroupType: uint8_t
+        MessageType: uint8_t
+        NumberOfReturnBitfields:
+          ReturnBitfield: uint8_t
+
+LogoutRequest:
+  fields:
+    StartOfMessage: uint16_t
+    MessageLength: uint16_t
+    MessageType: uint8_t
+    MatchingUnit: uint8_t
+    SequenceNumber: uint32_t
+
+ClientHeartBeat:
+  fields:
+    StartOfMessage: uint16_t
+    MessageLength: uint16_t
+    MessageType: uint8_t
+    MatchingUnit: uint8_t
+    SequenceNumber: uint32_t
+
+#table 19
+LoginResponse:
+  fields:
+    StartOfMessage: uint16_t
+    MessageLength: uint16_t
+    MessageType: uint8_t
+    MatchingUnit: uint8_t
+    SequenceNumber: uint32_t
+    SessionSubID: char[4]
+    LoginStatus: uint8_t
+    NumberOfParamGroups:
+
+      ParamGroups:
+        UnitSequenceParameterGroup::
+          ParamGroupLength: uint16_t
+          ParamGroupType: uint8_t
+          NoUnspecified_UnitReplay: uint8_t
+          NumberOfUnits:
+            UnitNumber: uint8_t
+            UnitSequence: uint32_t
+
+      ReturnBitfieldsParameterGroup:       
+        ParamGroupLength: uint16_t
+        ParamGroupType: uint8_t
+        MessageType: uint8_t
+        NumberOfReturnBitfields:
+          ReturnBitfield: uint8_t
+
+    
