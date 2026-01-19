@@ -162,7 +162,7 @@ NewOrderCrossMessageFields:
             Description: "must be 0xBA 0xBA"
         MessageLength:
             DataType: uint16_t
-            Description: "Number of bytes for the message, including this field but not including the two
+            Description: "Number of bytes for the message, including this field but not including the two"
         MessageType:
             DataType: uint8_t
             Description: "0x41"
@@ -230,4 +230,46 @@ NewOrderCrossMessageFields:
                 FrequentTraderID:
                     DataType: char[6]
                     Description: "Corresponds to FrequentTraderID (9924) in Cboe FIX. The FrequentTraderID assigned by Cboe to the client for the individual leg order."
-                #ADD OPTIONALS LATER 
+        Optionals:
+            MetaData: NewOrderCrossBitfields
+
+
+Optionals:
+    NewOrderCrossBitfields:
+        0:
+            Symbol:
+            MaturityDate:
+            StikePrice:
+            PutOrCall:
+            ExecInst:
+            AttributedQuote:
+            TargetPartyID:
+            PreventMatch:
+        1:
+            AutoMatch:
+            AutoMatchPrice:
+            LastPriority:
+            Account:
+            CMTANumber:
+            ClearingAccount:
+            RoutingFirmID:
+            ClearingOptionalData:
+        2:
+            ClientIDAttr:
+            EquityTradePrice:
+            EquityTradeSize:
+            EquityTradeVenue:
+            EquityTradeTransactTime:
+            EquityBuyClearingFirm:
+            EquitySellClearingFirm:
+            SessionElligibility:
+        3:
+            Compression:
+            ORS:
+            FrequentTraderID:
+            (Reserved1):
+            (Reserved2):
+            (Reserved3):
+            (Reserved4):
+            (Reserved5):
+
