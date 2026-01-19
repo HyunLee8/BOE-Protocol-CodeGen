@@ -238,35 +238,89 @@ Optionals:
     NewOrderCrossBitfields:
         0:
             Symbol:
+                DataType: char[8]
+                Description: "Corresponds to Symbol (55) in Cboe FIX. Ticker symbol of the option series."
             MaturityDate:
+                DataType: date
+                Description: "Corresponds to MaturityDate (5413) in Cboe FIX. Expiration date of the option series."
             StikePrice:
+                DataType: uint64_t
+                Description: "Corresponds to StrikePrice (202) in Cboe FIX. Strike
             PutOrCall:
+                DataType: char
+                Description: "Corresponds to PutOrCall (201) in Cboe FIX. 0 = Put 1 = Call"
             ExecInst:
+                DataType: char
+                Description: "Corresponds to ExecInst (18) in Cboe FIX. Execution instructions for the cross order. Multiple instructions can be specified by combining values. 0 = Stay on Offer Side 1 = Stay on Bid Side 2 = No Cross 3 = OK to Cross 4 = Call First 5 = Do Not Increase 6 = Do Not Reduce 7 = All or None 8 = Institution Only 9 = Reinstate on System Failure"
             AttributedQuote:
+                DataType: char
+                Description: "Corresponds to AttributedQuote (1146) in Cboe FIX. Indicates whether the cross order is an attributed quote. Y = Yes N = No"
             TargetPartyID:
+                DataType: char[4]
+                Description: "Corresponds to TargetPartyID (9945) in Cboe FIX. Target Party ID for the cross order."
             PreventMatch:
+                DataType: char[3]
+                Description: "Corresponds to PreventMatch (1138) in Cboe FIX. Indicates whether the cross order is to be prevented from matching with resting orders. Y = Yes N = No"
         1:
             AutoMatch:
+                DataType: char
+                Description: "Corresponds to AutoMatch (1140) in Cboe FIX. Indicates whether the cross order is eligible for auto-matching. Y = Yes N = No"
             AutoMatchPrice:
+                DataType: uint64_t
+                Description: "Corresponds to AutoMatchPrice (1141) in Cboe FIX. Auto-match price for the cross order."
             LastPriority:
+                DataType: char
+                Description: "Corresponds to LastPriority (1139) in Cboe FIX. Indicates whether the cross order has last priority in the auction. Y = Yes N = No"
             Account:
+                DataType: char[16]
+                Description: "Corresponds to Account (1) in Cboe FIX. Account identifier for the individual leg order."
             CMTANumber:
+                DataType: uint32_t
+                Description: "Corresponds to CMTANumber (9923) in Cboe FIX. The CMTANumber (Clearing Member Trading Authorization Number) assigned by OCC to the client for the individual leg order."
             ClearingAccount:
+                DataType: char[4]
+                Description: "Corresponds to ClearingAccount (440) in Cboe FIX. Clearing account identifier for the individual leg order."
             RoutingFirmID:
+                DataType: char[4]
+                Description: "Corresponds to RoutingFirmID (9925) in Cboe FIX. Routing firm identifier for the individual leg order."
             ClearingOptionalData:
+                DataType: char[16]
+                Description: "Corresponds to ClearingOptionalData (1156) in Cboe FIX"
         2:
             ClientIDAttr:
+                DataType: char[4]
+                Description: "Corresponds to ClientIDAttr (9926) in Cboe FIX. Client identifier attribute for the individual leg order."
             EquityTradePrice:
+                DataType: uint64_t
+                Description: "Corresponds to EquityTradePrice (9931) in Cboe FIX. Price of the equity trade associated with the option cross order."
             EquityTradeSize:
+                DataType: uint32_t
+                Description: "Corresponds to EquityTradeSize (9932) in Cboe FIX. Size of the equity trade associated with the option cross order."
             EquityTradeVenue:
+                DataType: char
+                Description: "Corresponds to EquityTradeVenue (9933) in Cboe FIX. Venue where the equity trade associated with the option cross order was executed."
             EquityTradeTransactTime:
+                DataType: DateTime64
+                Description: "Corresponds to EquityTradeTransactTime (9934) in Cboe FIX. Timestamp of the equity trade associated with the option cross order."
             EquityBuyClearingFirm:
+                DataType: char[4]
+                Description: "Corresponds to EquityBuyClearingFirm (9935) in Cboe FIX. Clearing firm identifier for the buy side of the equity trade associated with the option cross order."
             EquitySellClearingFirm:
+                DataType: char[4]
+                Description: "Corresponds to EquitySellClearingFirm (9936) in Cboe FIX. Clearing firm identifier for the sell side of the equity trade associated with the option cross order."
             SessionElligibility:
+                DataType: char
+                Description: "Corresponds to SessionElligibility (9937) in Cboe FIX. Session eligibility for the option cross order. R = Regular Trading Session E = Extended Trading Session"
         3:
             Compression:
+                DataType: char
+                Description: "Corresponds to Compression (9940) in Cboe FIX. Indicates whether the cross order is a compression order. Y = Yes N = No"
             ORS:
+                DataType: char
+                Description: "Corresponds to ORS (9941) in Cboe FIX. Order Routing System identifier for the individual leg order."
             FrequentTraderID:
+                DataType: char[6]
+                Description: "Corresponds to FrequentTraderID (9924) in Cboe FIX. The FrequentTraderID assigned by Cboe to the client for the individual leg order."
             (Reserved1):
             (Reserved2):
             (Reserved3):
