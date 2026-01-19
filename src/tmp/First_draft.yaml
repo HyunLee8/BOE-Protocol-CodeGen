@@ -1,76 +1,233 @@
 #table 12 Login Request
 LoginRequest:
-  fields:
-    StartOfMessage: uint16_t
-    MessageLength: uint16_t
-    MessageType: uint8_t
-    MatchingUnit: uint8_t
-    SequenceNumber: uint32_t
-    SessionSubID: char[4]
-    Username: char[4]
-    Password: char[10]
-    NumberOfParamGroups:
-
-      #table 12
-      ParamGroups:
-        UnitSequenceParameterGroup::
-          ParamGroupLength: uint16_t
-          ParamGroupType: uint8_t
-          NoUnspecified_UnitReplay: uint8_t
-          NumberOfUnits:
-            UnitNumber: uint8_t
-            UnitSequence: uint32_t
-
-      #table 13
-      ReturnBitfieldsParameterGroup:       
-        ParamGroupLength: uint16_t
-        ParamGroupType: uint8_t
-        MessageType: uint8_t
-        NumberOfReturnBitfields:
-          ReturnBitfield: uint8_t
+    fields:
+        StartOfMessage:
+            DataType: uint16_t
+            Descriotion: "must be 0xBA 0xBA"
+        MessageLength:
+            DataType: uint16_t
+            Description: "Number of bytes for the message, including this field but not including the two bytes for the StartOfMessage field."
+        MessageType:
+            DataType: uint8_t
+            Descriotion: "0x38"
+        MatchingUnit:
+            DataType: uint8_t
+            Description: "Always 0 for inbound (Member to Cboe) messages"
+        SequenceNumber:
+            DataType: uint32_t
+            Description: "Always 0 for session level messages."
+        SessionSubID:
+            DataType: char[4]
+            Description: "Session Sub ID supplied by Cboe."
+        Username:
+            DataType: char[4]
+            Description: "Username supplied by Cboe."
+        Password:
+            DataType: char[10]
+            Description: "Password supplied by Cboe."
+        NumberOfParamGroups:
+            DataType: uint8_t
+            Description: "A number, n (possibly 0), of parameter groups to follow."
+            MetaData: groups
+            groups:
+                UnitSequencesParameterGroups:
+                    ParamGroupLength:
+                        DataType: uint16_t
+                        Description: "Number of bytes for the parameter group, including this field"
+                    ParamGroupType:
+                        DataType: uint8_t
+                        Description: "0x80"
+                    NoUnspecified_UnitReplay:
+                        DataType: uint8_t
+                        Description: "Flag indicating whether to replay missed outgoing (Cboe to Member) messages for unspecified units. 0x00 = False (Replay Unspecified Units) 0x01 = True (Suppress Unspecified Units Replay)"
+                    NumberOfUnits:
+                        DataType: uint8_t
+                        Description: "A number, n (possibly 0), of unit/sequence pairs to follow, one per unit from which the Member has received messages."
+                        MetaData: groups
+                        groups:
+                            UnitNumber:
+                                DataType: uint8_t
+                                Description: "A Unit number"
+                            UnitSequence:
+                                DataType: uint32_t
+                                Description: "The last sequence number received from Cboe for the specified unit."
+                ReturnBitfieldsParameterGroup:       
+                    ParamGroupLength:
+                        DataType: uint16_t
+                        Description: "Number of bytes for the parameter group, including this field"
+                    ParamGroupType:
+                        DataType: uint8_t
+                        Description: "0x81"
+                    MessageType:
+                        DataType: uint8_t
+                        Description: "Return message type for which the bitfields are being specified (e.g., 0x25 for an Order Acknowledgment message)."
+                    NumberOfReturnBitfields:
+                        DataType: uint8_t
+                        Description: "number of bitfields to folow"
+                        MetaData: groups
+                        groups:
+                            ReturnBitfield:
+                                dataType: uint8_t
+                                Description: "Bitfield indentifying fields to return"
 
 LogoutRequest:
   fields:
-    StartOfMessage: uint16_t
-    MessageLength: uint16_t
-    MessageType: uint8_t
-    MatchingUnit: uint8_t
-    SequenceNumber: uint32_t
+    StartOfMessage:
+        DataType: uint16_t
+        Descriotion: "must be 0xBA 0xBA"
+    MessageLength:
+        DataType: uint16_t
+        Description: "Number of bytes for the message, including this field but not including the two bytes for the StartOfMessage field."
+    MessageType:
+        DataType: uint8_t
+        Descriotion: "0x02"
+    MatchingUnit:
+        DataType: uint8_t
+        Description: "Always 0 for inbound (Member to Cboe) messages"
+    SequenceNumber:
+        DataType: uint32_t
+        Description: "Always 0 for session level messages."
 
 ClientHeartBeat:
   fields:
-    StartOfMessage: uint16_t
-    MessageLength: uint16_t
-    MessageType: uint8_t
-    MatchingUnit: uint8_t
-    SequenceNumber: uint32_t
+    StartOfMessage:
+        DataType: uint16_t
+        Descriotion: "must be 0xBA 0xBA"
+    MessageLength:
+        DataType: uint16_t
+        Description: "Number of bytes for the message, including this field but not including the two bytes for the StartOfMessage field."
+    MessageType: 
+        DataType: uint8_t
+        Descriotion: "0x03"
+    MatchingUnit: 
+        DataType: uint8_t
+        Description: "Always 0 for inbound (Member to Cboe) messages" 
+    SequenceNumber:
+        DataType: uint32_t
+        Description: "Always 0 for session level messages." 
 
 #table 19
 LoginResponse:
   fields:
-    StartOfMessage: uint16_t
-    MessageLength: uint16_t
-    MessageType: uint8_t
-    MatchingUnit: uint8_t
-    SequenceNumber: uint32_t
-    SessionSubID: char[4]
-    LoginStatus: uint8_t
+    StartOfMessage: 
+        DataType: uint16_t
+        Descriotion: "must be 0xBA 0xBA"
+    MessageLength:
+        DataType: uint16_t
+        Description: "Number of bytes for the message, including this field but not including the two bytes for the StartOfMessage field." 
+    MessageType:
+        DataType: uint8_t
+        Descriotion: "0x24" 
+    MatchingUnit:
+        DataType: uint8_t
+        Description: "Always 0 for outbound (Cboe to Member) messages" 
+    SequenceNumber:
+        DataType: uint32_t
+        Description: "Always 0 for session level messages."
+    LoginResponseStatus:
+        DataType: char
+        Description: "Accepted, or the reason for the rejection. A = Login Accepted N = Not authorized (invalid username/password) D = Session is disabled B = Session in use S = Invalid session Q = Sequence ahead in Login message I = Invalid unit given in Login message F = Invalid return bit field in login message M = Invalid Login Request message structure" 
+    LoginResponseText:
+        DataType: char[60]
+        Description: "Human-readable text with additional information about the reason for rejection. ASCII NUL (0x00) filled on the right, if necessary."
+    NoUnspecified_UnitReplay:
+        DataType: uint8_t
+        Description: "Echoed back from the original Login Request message"
+    LastRecievedSequenceNumber:
+        DataType: uint32_t
+        Description: "Last inbound (Member to Cboe) message sequence number processed by Cboe"
+    NumberOfUnits:
+        DataType: uint8_t
+        Description: "A number, n, of unit/sequence pairs to follow, one per unit. A pair for every unit will be sent, even if no messages have been sent to this port today. For unsuccessful logins, this will be 0."
+        MetaData: groups    
+        groups:
+            UnitNumber:
+                DataType: uint8_t
+                Description: "A Unit number"
+            UnitSequence:
+                DataType: uint32_t
+                Description: Highest available Cboe to Member sequence number for the unit."
     NumberOfParamGroups:
+        DataType: uint8_t
+        Description: Echoed back from the original Login Request message."
+        MetaData: groups
+        groups:
+            ParamGroups: "LoginRequest.fields.NumberOfParamGroups.groups.UnitSequencesParameterGroups
+                          LoginRequest.fields.NumberOfParamGroups.groups.ReturnBitfieldsParameterGroup"
 
-      ParamGroups:
-        UnitSequenceParameterGroup::
-          ParamGroupLength: uint16_t
-          ParamGroupType: uint8_t
-          NoUnspecified_UnitReplay: uint8_t
-          NumberOfUnits:
-            UnitNumber: uint8_t
-            UnitSequence: uint32_t
-
-      ReturnBitfieldsParameterGroup:       
-        ParamGroupLength: uint16_t
-        ParamGroupType: uint8_t
-        MessageType: uint8_t
-        NumberOfReturnBitfields:
-          ReturnBitfield: uint8_t
-
-    
+NewOrderCrossMessageFields:
+    fields:
+        StartOfMessage:
+            DataType: uint16_t
+            Description: "must be 0xBA 0xBA"
+        MessageLength:
+            DataType: uint16_t
+            Description: "Number of bytes for the message, including this field but not including the two
+        MessageType:
+            DataType: uint8_t
+            Description: "0x41"
+        MatchingUnit:
+            DataType: uint8_t
+            Description: "Always 0 for inbound (Member to Cboe) messages"
+        SequenceNumber:
+            DataType: uint32_t
+            Description: "Sequence number of this message for the specified Matching Unit."
+        CrossID:
+            DataType: char[20]
+            Description: "Corresponds to CrossID (548) in Cboe FIX. Day-unique identifier for the cross order chosen by the client. Characters in the ASCII range 33- 126 are allowed, except for comma, semicolon, pipe, the ‘at’ symbol and double quotes."
+        CrossType:
+            DataType: uint8_t
+            Description: "Corresponds to CrossType (549) in Cboe FIX. Type of auction order being submitted. This indicates the type of auction that will be initiated upon order entry. 1 = Automated Improvement Mechanism (AIM) 2 = Qualified Contingent Cross (QCC) 3 = Solicitation Cross (SAM) 4 = Position Compression Cross (PCC) (C1 Only)"
+        CrossPrioritization:
+            DataType: uint8_t
+            Description: "Corresponds to CrossPrioritization (550) in Cboe FIX. Indicates how the cross order will be prioritized against other orders in the auction. 1 = Buy 2 = Sell"
+        Price:
+            DataType: uint64_t
+            Description: "Corresponds to Price (44) in Cboe FIX. Auction Price. Must be non-negative"
+        OrderQty:
+            DataType: uint32_t
+            Description: "Corresponds to OrderQty (38) in Cboe FIX. Total quantity of the cross order."
+        NumberOfNewOrderCrossBitfields:
+            DataType: uint8_t
+            Description: "bitfields identifying which bitfields are set"
+            MetaData: groups
+            groups:
+                NewOrderCrossBitfields:
+                    DataType: uint8_t
+                    Description: "Bitfield identifying fields to follow."
+        GroupCnt:
+            Groups:
+                Side:
+                    DataType: char
+                    Description: "Corresponds to Side (54) in Cboe FIX. Side of the individual leg order. 1 = Buy 2 = Sell"
+                AllocQty:
+                    DataType: uint32_t
+                    Description: "Corresponds to AllocQty (80) in Cboe FIX. Quantity of the individual leg order."
+                ClOrdID:
+                    DataType: char[20]
+                    Description: "Corresponds to ClOrdID (11) in Cboe FIX. Client order identifier for the individual leg order. Characters in the ASCII range 33-126 are allowed, except for comma, semicolon, pipe, the ‘at’ symbol and double quotes."
+                Capacity:
+                    DataType: char
+                    Description: "Corresponds to OrderCapacity (47) in Cboe FIX. C = Customer= M = Market Maker F = Firm U = Professional Customer N = AwayMarket Maker B = Broker-Dealer J = Joint Back Office"
+                OpenClose:
+                    DataType: char
+                    Description: "Corresponds to OpenClose (77) in Cboe FIX. Indicates status of client position in the option leg. O = Open C = Close M = Close but open a new position N = None* *Option legs with Capacity = M or ‘N’ will not be required to specify OpenClose on their legs or may optionally specify a value of ‘N’, unless the series is limited to closing only. If the leg is limited to closing only transactions, only Capacity = M will be permitted to submit OpenClose = O if the order has TimeInForce = ‘3’ (IOC) and RoutingInst = B , or the order has a RoutingInst = P ."
+                GiveUpFirmID:
+                    DataType: char[4]
+                    Description: "Corresponds to GiveUpFirmID (9946) in Cboe FIX. Give-up firm identifier for the individual leg order."
+                Account:
+                    DataType: char[16]
+                    Description: "Corresponds to Account (1) in Cboe FIX. Account identifier for the individual leg order."
+                CMTANumber:
+                    DataType: uint32_t
+                    Description: "Corresponds to CMTANumber (9923) in Cboe FIX. The CMTANumber (Clearing Member Trading Authorization Number) assigned by OCC to the client for the individual leg order."
+                ClearingAccount:
+                    DataType: char[4]
+                    Description: "Corresponds to ClearingAccount (440) in Cboe FIX. Clearing account identifier for the individual leg order."
+                ClearingOptionalData:
+                    DataType: char[16]
+                    Description: "Corresponds to ClearingOptionalData (1156) in Cboe FIX
+                FrequentTraderID:
+                    DataType: char[6]
+                    Description: "Corresponds to FrequentTraderID (9924) in Cboe FIX. The FrequentTraderID assigned by Cboe to the client for the individual leg order."
+                #ADD OPTIONALS LATER 
