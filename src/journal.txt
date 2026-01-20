@@ -1,0 +1,14 @@
+Decided to start writing here because I'm sped and don't understand anything
+
+Date: 01.20.2026
+Title: Setting up nested groups attempt1
+
+  Summary:
+    - Switched from all vectors to having enums, structs, and classes. 
+    - Set up constants for shared data and String Lengths for modularity.
+    - completed first attempt of login request and NewOrderCrossMessageFields
+
+  Goals:
+    - get more sleep
+    - Create a parser for decoding
+    - Figure out how to configure bitfields
