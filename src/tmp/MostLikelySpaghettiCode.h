@@ -11,6 +11,20 @@ struct ParamGroups {
     uint32_t UnitSequence;
 };
 
+enum ReturnBitfields: uint8_t {
+    RETURNBITFIELDS = 0
+};
+
+//table 10
+class ReturnBitFieldsParameterGroup {
+    uint16_t ParamGroupLength_;
+    uint8_t ParaGroupType_ = 129; //0x81 as a hex value
+    uint8_t MessageType_;
+    uint8_t NumberOfReturnBitfields_;
+    std::vector<ReturnBitfields> returnBitfields;
+};
+
+
 class LoginRequest {
 public:
     uint16_t startOfMessage;
@@ -31,7 +45,7 @@ public:
         startOfMessage(encodedStartOfMessage),
         messageLength(encodedMessageLength),
         messageType(encodedMessageType),
-        matchingUnit(encodedMatchingUNit),
+        matchingUnit(encodedMatchingUnit),
         sequenceNumber(encodedSequenceNumber),
         numberOfParamGroups(encodedNumberOfParamGroups),
         paramGroups(encodedParamGroups) {
