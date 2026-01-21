@@ -4,6 +4,8 @@
 #include<array>
 #include<cstdint>
 #include<iomanip>
+#include<unordered_map>
+#include<variant>
 
 //**Constants
 enum StringLength : size_t {
@@ -17,29 +19,131 @@ enum StringLength : size_t {
     CMTA_NUMBER = 4,
     CLEARING_ACCOUNT = 4,
     CLEARING_OPTIONAL_DATA = 16,
-    FREQUENT_TRADER_ID = 6
+    FREQUENT_TRADER_ID = 6,
+    SYMBOL = 8,
+    TARGET_PARTY_ID = 4,
+    PREVENT_MATCH = 3,
+    ROUTING_FIRM_ID = 4,
+    CLIENT_ID_ATTR = 4,
+    EQUITY_BUY_CLEARING_FIRM = 4,
+    EQUITY_SELL_CLEARING_FIRM = 4
 };
 
-enum NewOrderCrossBitfieldIndex0 {
-    SYMBOL = 0,
-    MATURITY_DATE = 1,
-    STRIKE_PRICE  = 2,
-    PUT_OR_CALL = 3,
-    EXEC_INST = 4,
-    ATTRIBUTED_QUOTE = 5,
-    TARGET_PARTY_ID = 6,
-    PREVENT_MATCH = 7
+
+//Indexes
+/*
+
+INDEXING may need later
+
+class NewOrderCrossBitfields {
+    enum NewOrderCrossBitfieldIndex0 {
+        SYMBOL = 0,
+        MATURITY_DATE = 1,
+        STRIKE_PRICE  = 2,
+        PUT_OR_CALL = 3,
+        EXEC_INST = 4,
+        ATTRIBUTED_QUOTE = 5,
+        TARGET_PARTY_ID = 6,
+        PREVENT_MATCH = 7
+    };
+    
+    enum NewOrderCrossBitfieldIndex1 {
+        AUTO_MATCH = 0,
+        AUTO_MATCH_PRICE = 1,
+        LAST_PRIORITY = 2,
+        ACCOUNT = 3,
+        CMTA_NUMBER = 4,
+        CLEARING_ACCOUNT = 5,
+        ROUTING_FIRM_ID = 6,
+        CLEARING_OPTIONAL_DATA = 7
+    };
+    
+    enum NewOrderCrossBitfieldIndex2 {
+        CLINET_ID_ATTR = 0,
+        EQUITY_TRADE_PRICE = 1,
+        EQUITY_TRADE_SIZE = 2,
+        EQUITY_TRADE_VENUE = 3,
+        EQUITY_TRANSACT_TIME = 4,
+        EQUITY_BUY_CLEARING_FIRM = 5,
+        EQUITY_SELL_CLEARING_FIRM = 6,
+        SESSION_ELIGIBILITY = 7
+    };
+    
+    enum NewOrderCrossBitfieldIndex3 {
+        COMPRESSION = 0,
+        ORS = 1,
+        FREQUENT_TRADER_ID = 2,
+        RESERVED_1 = 3,
+        RESERVED_2 = 4,
+        RESERVED_3 = 5,
+        RESERVED_4 = 6,
+        RESERVED_5 = 7
+    };
 };
 
-enum NewOrderCrossBitfieldIndex1 {
-    AUTO_MATCH = 0,
-    AUTO_MATCH_PRICE = 1,
-    LAST_PRIORITY = 2,
-    ACCOUNT = 3,
-    CMTA_NUMBER = 4,
-    CLEARING_ACCOUNT = 5,
-    ROUTING_FIRM_NUMBER = 6,
+*/
 
+class NewOrderCrossBitfields {
+    enum SessionEligibility : char {
+        REGULAR_TRADING_HOURS = 'R',
+        GLOBAL_TRADING_HOURS = 'A',
+        CURB_SESSION = 'B'
+    };
+
+    enum BitfieldIndex : uint8_t {
+        INDEX_0 = 0,
+        INDEX_1 = 1,
+        INDEX_2 = 2,
+        INDEX_3 = 3,
+    };
+
+    struct NewOrderCrossBitfieldIndex0 {
+        std::array<char, StringLength::SYMBOL> symbol;
+        uint32_t maturityDate;
+        uint64_t strikePrice;
+        char putOrCall;
+        char execInst;
+        char attributedQuote;
+        std::array<char, StringLength::TARGET_PARTY_ID> targetPartyId;
+        std::array<char, StringLength::PREVENT_MATCH> preventMatch;
+    };
+    
+    struct NewOrderCrossBitfieldIndex1 {
+        char autoMatch;
+        uint64_t autoMatchPrice;
+        char lastPriority;
+        std::array<char, StringLength::ACCOUNT> account;
+        uint32_t cmtaNumber;
+        std::array<char, StringLength::CLEARING_ACCOUNT> clearingAccount;
+        std::array<char, StringLength::ROUTING_FIRM_ID> routingFirmId;
+        std::array<char, StringLength::CLEARING_OPTIONAL_DATA> clearingOptionalData;
+    };
+    
+    struct NewOrderCrossBitfieldIndex2 {
+        std::array<char, StringLength::CLIENT_ID_ATTR> clientIdAttr;
+        uint64_t equityTradePrice;
+        uint32_t equityTradeSize;
+        char equityTradeVenue;
+        std::time_t equityTransactTime;
+        std::array<char, StringLength::EQUITY_BUY_CLEARING_FIRM> equityBuyClearingFirm;
+        std::array<char, StringLength::EQUITY_SELL_CLEARING_FIRM> equitySellClearingFirm;
+        SessionEligibility sessionEligibility;
+    };
+    
+    struct NewOrderCrossBitfieldIndex3 {
+        char compression;
+        char ors;
+        std::array<char, StringLength::FREQUENT_TRADER_ID> frequentTraderId;
+    };
+
+    using BitfieldVariant = std::variant <
+        NewOrderCrossBitfieldIndex0,
+        NewOrderCrossBitfieldIndex1,
+        NewOrderCrossBitfieldIndex2,
+        NewOrderCrossBitfieldIndex3
+    >;
+
+    std::unordered_map<BitfieldIndex, BitfieldVariant> bitfields;
 };
 
 //-- LOGIN REQUEST --

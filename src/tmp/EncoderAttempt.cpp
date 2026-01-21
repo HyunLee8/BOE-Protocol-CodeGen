@@ -15,12 +15,8 @@ struct Messsage{
     uint32_t OrderQty;
     uint8_t NumberOfNewOrderBitfields;
     
-}
-int main() {
-    
-    return 0;
-}
+};
 
 void encode(std::string input) {
 
-}
+};
