@@ -1,4 +1,5 @@
-#include<iostream>
+#pragma once
+
 #include<string>
 #include<vector>
 #include<array>
@@ -83,7 +84,8 @@ class NewOrderCrossBitfields {
 
 */
 
-class NewOrderCrossBitfields {
+class NewOrderCrossBitfield {
+public:
     enum SessionEligibility : char {
         REGULAR_TRADING_HOURS = 'R',
         GLOBAL_TRADING_HOURS = 'A',
@@ -241,11 +243,6 @@ public:
         std::array<char, StringLength::FREQUENT_TRADER_ID> frequentTraderId;
     };
 
-    //not repeating groups
-    struct OptionalFields {
-
-    };
-
 private:
     uint16_t startOfMessage_ = 47802;
     uint16_t messageLength_;
@@ -261,5 +258,5 @@ private:
     std::vector<NewOrderCrossBitfield> newOrderCrossBitfields_;
     uint16_t groupCnt_;
     std::vector<RepeatingGroupOfNewOrderCross> RepeatingGroupsOfNewOrderCross_;
-    std::vector<OptionalFields> optionalFields;
+    std::vector<NewOrderCrossBitfield> newOrderCrossBitfields_;
 };
