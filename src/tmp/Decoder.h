@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MessageFormat.h"
+#include "Msgs.h"
 
 #include <array>
 #include <vector>
@@ -12,7 +12,7 @@ class Decoder {
     std::vector<char> charHexPayload_;
 public:
     Decoder(std::vector<char> hexPayload) :
-        charHexPayload_(hexPayload), NOCMF_() {
+        charHexPayload_(hexPayload) {
         for(char ch : hexPayload) {
             std::cout << ch;
         }

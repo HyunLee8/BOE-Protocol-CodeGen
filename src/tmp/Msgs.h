@@ -32,23 +32,31 @@ enum StringLength : size_t {
 
 enum Offsets : size_t {
     START_OF_MESSAGE = 2,
-    MESSAGE_LENGTH = 2,
-    MESSAGE_TYPE = 4,
-    MATCHING_UNIT = 5,
-    SEQUENCE_NUMBER = 6,
-    CROSS_ID = 10,
-    CROSS_TYPE = 30,
-    CROSS_PRIORITZATION = 31,
-    PRICE = 32,
-    ORDER_QTY = 40,
-    NUMBER_OF_NEW_ORDER_CROSS_BITFIELDS = 44,
-    NEW_ORDER_CROSS_BITFIELDS = 45
+    MESSAGE_LENGTH = 4,
+    MESSAGE_TYPE = 5,
+    MATCHING_UNIT = 6,
+    SEQUENCE_NUMBER = 10,
+    CROSS_ID = 30,
+    CROSS_TYPE = 31,
+    CROSS_PRIORITZATION = 32,
+    PRICE = 40,
+    ORDER_QTY = 44,
+    NUMBER_OF_NEW_ORDER_CROSS_BITFIELDS = 45,
+    NEW_ORDER_CROSS_BITFIELDS = 46
 };
 
 
 //DIFINITIVE VARIABLES
+enum HexLength : size_t {
+    HEXLENGTH
+};
+
 enum StartOfMesageEnumOptions : uint16_t {
     STARTOFMESSAGE = 47802
+};
+
+enum MessageTypeEnumOptions : uint8_t {
+    MESSAGETYPE = 65
 };
 
 //Indexes
@@ -266,7 +274,7 @@ public:
 private:
     uint16_t startOfMessage_;
     uint16_t messageLength_;
-    uint8_t messageType_ = 65;
+    uint8_t messageType_;
     uint8_t matchingUnit_ = 0;
     uint32_t sequenceNumber_;
     std::array<char, StringLength::CROSSID> crossId_;
@@ -322,8 +330,8 @@ public:
     char getMessageLengthType() {
         return typeid(messageLength_).name()[0];
     }
-    char getMatchingUnitType() {
-        return typeid(matchingUnit_).name()[0];
+    char getMessageTypeType() {
+        return typeid(messageType_).name()[0];
     }
     char getMatchingUnitType() {
         return typeid(matchingUnit_).name()[0];
@@ -364,6 +372,11 @@ public:
         if(NOCMF_.getMessageLengthType() == 't') {
             uint16_t length = (hex.length()/2) - 2;
             NOCMF_.setMessageLength(length);
+        }
+    }
+    void setMessageType() {
+        if(NOCMF_.getMessageTypeType() == 'h') {
+            NOCMF_.setMessageType(MessageTypeEnumOptions::MESSAGETYPE); 
         }
     }
 };
