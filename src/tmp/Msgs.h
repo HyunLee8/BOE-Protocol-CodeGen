@@ -30,6 +30,26 @@ enum StringLength : size_t {
     EQUITY_SELL_CLEARING_FIRM = 4
 };
 
+enum Offsets : size_t {
+    START_OF_MESSAGE = 2,
+    MESSAGE_LENGTH = 2,
+    MESSAGE_TYPE = 4,
+    MATCHING_UNIT = 5,
+    SEQUENCE_NUMBER = 6,
+    CROSS_ID = 10,
+    CROSS_TYPE = 30,
+    CROSS_PRIORITZATION = 31,
+    PRICE = 32,
+    ORDER_QTY = 40,
+    NUMBER_OF_NEW_ORDER_CROSS_BITFIELDS = 44,
+    NEW_ORDER_CROSS_BITFIELDS = 45
+};
+
+
+//DIFINITIVE VARIABLES
+enum StartOfMesageEnumOptions : uint16_t {
+    STARTOFMESSAGE = 47802
+};
 
 //Indexes
 /*
@@ -244,7 +264,7 @@ public:
     };
 
 private:
-    uint16_t startOfMessage_ = 47802;
+    uint16_t startOfMessage_;
     uint16_t messageLength_;
     uint8_t messageType_ = 65;
     uint8_t matchingUnit_ = 0;
@@ -259,4 +279,91 @@ private:
     uint16_t groupCnt_;
     std::vector<RepeatingGroupOfNewOrderCross> RepeatingGroupsOfNewOrderCross_;
     std::vector<NewOrderCrossBitfield> newOrderCrossBitfields_;
+
+public:
+    void setStartOfMessage(uint16_t input) {
+        startOfMessage_ = input;
+    }
+    void setMessageLength(uint16_t input) {
+        messageLength_ = input;
+    }
+    void setMessageType(uint8_t input) {
+        messageType_ = input;
+    }
+    void setMatchingUnit(uint8_t input) {
+        matchingUnit_ = input;
+    }
+    void setSequenceNumber(uint32_t input) {
+        sequenceNumber_ = input;
+    }
+    void setCrossId(std::array<char, StringLength::CROSSID> &input) {
+        crossId_ = input;
+    }
+    void setCrossType(char &input) {
+        crossType_ = input;
+    }
+    void setCrossPrioritization(char &input) {
+        crossPrioritization_ = input;
+    }
+    void setPrice(uint64_t input) {
+        price_ = input;
+    }
+    void setOrderQty(uint32_t input) {
+        orderQty_ = input;
+    }
+    void setNumberOfNewOrderCrossBitfields(uint8_t input) {
+        numberOfNewOrderCrossBitfields_ = input;
+    }
+
+public:
+    char getStartOfMessageType() {
+        return typeid(startOfMessage_).name()[0];
+    }
+    char getMessageLengthType() {
+        return typeid(messageLength_).name()[0];
+    }
+    char getMatchingUnitType() {
+        return typeid(matchingUnit_).name()[0];
+    }
+    char getMatchingUnitType() {
+        return typeid(matchingUnit_).name()[0];
+    }
+    char getSequenceNumberType() {
+        return typeid(sequenceNumber_).name()[0];
+    }
+    char getCrossIdType() {
+        return typeid(crossId_).name()[0];
+    }
+    char getCrossTypeType() {
+        return typeid(crossId_).name()[0];
+    }
+    char getCrossPrioritizationType() {
+        return typeid(crossPrioritization_).name()[0];
+    }
+    char getPriceType() {
+        return typeid(price_).name()[0];
+    }
+    char getOrderQtyType() {
+        return typeid(orderQty_).name()[0];
+    }
+    char getNumberOfNewOrderCrossBitfieldsType() {
+        return typeid(numberOfNewOrderCrossBitfields_).name()[0];
+    }
+};
+
+class Parser {
+    NewOrderCrossMessageFields NOCMF_;
+
+public:
+    void setStartOfMessage() {
+        if(NOCMF_.getStartOfMessageType() == 't') {
+            NOCMF_.setStartOfMessage(StartOfMesageEnumOptions::STARTOFMESSAGE); 
+        }
+    }
+    void setMessageLength(std::string hex) {
+        if(NOCMF_.getMessageLengthType() == 't') {
+            uint16_t length = (hex.length()/2) - 2;
+            NOCMF_.setMessageLength(length);
+        }
+    }
 };
